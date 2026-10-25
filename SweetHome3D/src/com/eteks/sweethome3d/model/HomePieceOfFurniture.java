@@ -58,7 +58,7 @@ public class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
    */
   public enum SortableProperty {CATALOG_ID, NAME, WIDTH, DEPTH, HEIGHT, MOVABLE, 
                                 DOOR_OR_WINDOW, COLOR, TEXTURE, VISIBLE, X, Y, ELEVATION, ANGLE,
-                                PRICE, VALUE_ADDED_TAX, VALUE_ADDED_TAX_PERCENTAGE, PRICE_VALUE_ADDED_TAX_INCLUDED, LEVEL};
+                                PRICE, VALUE_ADDED_TAX, VALUE_ADDED_TAX_PERCENTAGE, PRICE_VALUE_ADDED_TAX_INCLUDED, LEVEL, VOLUME};
   private static final Map<SortableProperty, Comparator<HomePieceOfFurniture>> SORTABLE_PROPERTY_COMPARATORS;
   private static final float [][] IDENTITY = new float [][] {{1, 0, 0}, {0, 1, 0}, {0, 0, 1}};
   
@@ -107,6 +107,11 @@ public class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
           return HomePieceOfFurniture.compare(piece1.depth, piece2.depth);
         }
       });
+    SORTABLE_PROPERTY_COMPARATORS.put(SortableProperty.VOLUME, new Comparator<HomePieceOfFurniture>() {
+      public int compare(HomePieceOfFurniture piece1, HomePieceOfFurniture piece2) {
+        return HomePieceOfFurniture.compare(piece1.volume, piece2.volume);
+      }
+    });
     SORTABLE_PROPERTY_COMPARATORS.put(SortableProperty.MOVABLE, new Comparator<HomePieceOfFurniture>() {
         public int compare(HomePieceOfFurniture piece1, HomePieceOfFurniture piece2) {
           return HomePieceOfFurniture.compare(piece1.movable, piece2.movable);
@@ -244,6 +249,7 @@ public class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
   private float                  width;
   private float                  depth;
   private float                  height;
+  private float                  volume;
   private float                  elevation;
   private float                  dropOnTopElevation;
   private boolean                movable;
@@ -286,6 +292,7 @@ public class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
     this.width = piece.getWidth();
     this.depth = piece.getDepth();
     this.height = piece.getHeight();
+    this.volume = piece.getWidth() * piece.getDepth() * piece.getHeight();
     this.elevation = piece.getElevation();
     this.dropOnTopElevation = piece.getDropOnTopElevation();
     this.movable = piece.isMovable();
@@ -538,6 +545,8 @@ public class HomePieceOfFurniture extends HomeObject implements PieceOfFurniture
       throw new IllegalStateException("Piece isn't resizable");
     }
   }
+
+  public float getVolume(){ return this.volume;}
 
   /**
    * Returns the height of this piece of furniture.
