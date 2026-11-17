@@ -2023,7 +2023,14 @@ public class PlanComponent extends JComponent implements PlanView, Scrollable, P
       if (this.home.getPrint() == null || this.home.getPrint().getPlanScale() == null) {
         // Compute a scale that ensures the plan will fill the component if plan scale is null
         printScale = getPrintPreferredScale(g, pageFormat) * LengthUnit.centimeterToInch(72);
-        if (pageIndex > 0) {
+        List<Level> viewableLevels = new ArrayList<>();
+        List<Level> levels = home.getLevels();
+        for(Level level: levels){
+          if(level.isViewable()){
+            viewableLevels.add(level);
+          }
+        }
+        if (pageIndex >= viewableLevels.size()) {
           return NO_SUCH_PAGE;
         }
         pagesPerRow = 1;
